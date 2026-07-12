@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>VanandDental</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#F5F2EB;
+  --surface:#FFFFFF;
+  --surface-alt:#ECE6D8;
+  --ink:#212C2E;
+  --ink-soft:#647070;
+  --ink-faint:#9BA5A3;
+  --primary:#2E5E59;
+  --primary-dark:#1E403C;
+  --primary-light:#4C837B;
+  --accent:#B8895F;
+  --danger:#B1503E;
+  --line:#DDD5C2;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(33,44,46,0.06), 0 8px 24px -12px rgba(33,44,46,0.18);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+}
+#app{min-height:100vh;}
+button{font-family:inherit;cursor:pointer;}
+input{font-family:inherit;}
+::selection{background:var(--accent);color:#fff;}
+
+.hidden{display:none !important;}
+
+/* ---------- Tooth logomark ---------- */
+.mark{display:inline-block;}
+.mark svg{display:block;}
+
+/* ---------- AUTH SCREEN ---------- */
+#auth{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns: 1.1fr 1fr;
+}
+@media (max-width: 860px){
+  #auth{grid-template-columns:1fr;}
+  #auth .brandPanel{min-height:220px;}
+}
+.brandPanel{
+  background:radial-gradient(120% 140% at 15% 10%, var(--primary-light) 0%, var(--primary) 45%, var(--primary-dark) 100%);
+  color:#F5F2EB;
+  padding:56px 48px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  overflow:hidden;
+}
+.brandPanel .toothField{
+  position:absolute;
+  inset:0;
+  opacity:0.08;
+  pointer-events:none;
+}
+.brandTop{position:relative;z-index:1;display:flex;align-items:center;gap:12px;}
+.brandName{font-family:'Fraunces',serif;font-size:22px;letter-spacing:0.01em;}
+.brandName b{font-weight:600;}
+.brandName span{font-weight:400;opacity:0.85;}
+
+.brandMid{position:relative;z-index:1;max-width:420px;}
+.brandMid h1{
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  font-size:clamp(32px,4vw,44px);
+  line-height:1.12;
+  margin:0 0 18px;
+}
+.brandMid p{
+  font-size:15px;
+  line-height:1.6;
+  color:#DCE7E3;
+  margin:0;
+}
+.brandBottom{position:relative;z-index:1;font-size:13px;color:#BFD1CB;font-family:'IBM Plex Mono',monospace;}
+
+.formPanel{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:48px 32px;
+}
+.formCard{width:100%;max-width:380px;}
+.formCard h2{
+  font-family:'Fraunces',serif;
+  font-weight:500;
+  font-size:26px;
+  margin:0 0 6px;
+}
+.formCard .sub{
+  color:var(--ink-soft);
+  font-size:14px;
+  margin:0 0 28px;
+}
+.field{margin-bottom:16px;}
+.field label{
+  display:block;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--ink-soft);
+  margin-bottom:6px;
+  letter-spacing:0.01em;
+}
+.field input{
+  width:100%;
+  padding:11px 13px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  font-size:14.5px;
+  background:var(--surface);
+  color:var(--ink);
+  outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+.field input:focus{
+  border-color:var(--primary-light);
+  box-shadow:0 0 0 3px rgba(76,131,123,0.15);
+}
+.field input.invalid{border-color:var(--danger);}
+
+.btnPrimary{
+  width:100%;
+  padding:12px 16px;
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  border-radius:9px;
+  font-size:14.5px;
+  font-weight:600;
+  letter-spacing:0.01em;
+  transition:background .15s ease;
+}
+.btnPrimary:hover{background:var(--primary-dark);}
+.btnPrimary:disabled{opacity:0.6;cursor:default;}
+
+.divider{
+  display:flex;align-items:center;gap:12px;
+  margin:20px 0;color:var(--ink-faint);font-size:12.5px;
+}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+
+.btnGoogle{
+  width:100%;
+  padding:11px 16px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:9px;
+  font-size:14px;
+  font-weight:600;
+  color:var(--ink);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:border-color .15s ease, background .15s ease;
+}
+.btnGoogle:hover{background:var(--surface-alt);}
+
+.switchLine{
+  margin-top:22px;
+  font-size:13.5px;
+  color:var(--ink-soft);
+  text-align:center;
+}
+.switchLine a{color:var(--primary);font-weight:600;text-decoration:none;cursor:pointer;}
+.switchLine a:hover{text-decoration:underline;}
+
+.formMsg{
+  font-size:13px;
+  padding:10px 12px;
+  border-radius:8px;
+  margin-bottom:16px;
+  display:none;
+}
+.formMsg.show{display:block;}
+.formMsg.error{background:#FBEAE6;color:var(--danger);}
+.formMsg.info{background:#EAF1EE;color:var(--primary-dark);}
+
+.googleNote{
+  font-size:12px;
+  color:var(--ink-faint);
+  text-align:center;
+  margin-top:10px;
+  line-height:1.5;
+}
+
+/* ---------- DASHBOARD ---------- */
+#dashboard{min-height:100vh;display:flex;flex-direction:column;}
+.topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  padding:16px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:5;
+}
+.topbar .brandName{color:var(--ink);}
+.topbar .brandName svg .toothStroke{stroke:var(--primary);}
+.topbarRight{display:flex;align-items:center;gap:16px;}
+.userChip{
+  display:flex;align-items:center;gap:9px;
+  font-size:13.5px;color:var(--ink-soft);
+}
+.userAvatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--surface-alt);
+  color:var(--primary-dark);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  font-family:'Fraunces',serif;
+}
+.btnGhost{
+  padding:8px 14px;
+  background:transparent;
+  border:1px solid var(--line);
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--ink-soft);
+}
+.btnGhost:hover{border-color:var(--ink-faint);color:var(--ink);}
+
+.main{
+  flex:1;
+  max-width:920px;
+  width:100%;
+  margin:0 auto;
+  padding:36px 28px 80px;
+}
+.mainHead{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:26px;flex-wrap:wrap;gap:14px;
+}
+.mainHead h1{
+  font-family:'Fraunces',serif;font-weight:500;
+  font-size:26px;margin:0 0 4px;
+}
+.mainHead .count{
+  color:var(--ink-soft);font-size:13.5px;
+  font-family:'IBM Plex Mono',monospace;
+}
+.btnAdd{
+  padding:11px 18px;
+  background:var(--primary);
+  color:#fff;border:none;border-radius:9px;
+  font-size:14px;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+}
+.btnAdd:hover{background:var(--primary-dark);}
+
+.searchRow{margin-bottom:22px;}
+.searchRow input{
+  width:100%;
+  padding:11px 14px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  font-size:14px;
+  background:var(--surface);
+  outline:none;
+}
+.searchRow input:focus{border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(76,131,123,0.12);}
+
+.patientGrid{display:flex;flex-direction:column;gap:14px;}
+
+.chart{
+  position:relative;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px 22px 18px;
+  padding-left:26px;
+}
+.chart::before{
+  content:"";
+  position:absolute;
+  left:0;top:14px;bottom:14px;
+  width:5px;
+  border-radius:4px;
+  background:var(--accent);
+}
+.chart.past::before{background:var(--ink-faint);}
+.chartTop{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;
+}
+.chartName{
+  font-family:'Fraunces',serif;
+  font-size:19px;font-weight:500;
+  margin:0 0 3px;
+}
+.chartReason{
+  color:var(--ink-soft);
+  font-size:13.5px;
+}
+.chartTime{
+  text-align:right;
+  font-family:'IBM Plex Mono',monospace;
+}
+.chartTime .date{font-size:13px;color:var(--primary-dark);font-weight:600;}
+.chartTime .time{font-size:12.5px;color:var(--ink-soft);}
+.chartMeta{
+  display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;
+}
+.chartMeta div{font-size:13px;color:var(--ink-soft);}
+.chartMeta span{color:var(--ink-faint);font-size:11.5px;display:block;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;}
+.chartActions{
+  display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);
+}
+.chartActions button{
+  font-size:12.5px;font-weight:600;
+  padding:6px 12px;border-radius:7px;border:1px solid var(--line);
+  background:transparent;color:var(--ink-soft);
+}
+.chartActions button:hover{background:var(--surface-alt);}
+.chartActions button.del:hover{color:var(--danger);border-color:var(--danger);}
+
+.emptyState{
+  text-align:center;
+  padding:64px 24px;
+  color:var(--ink-soft);
+}
+.emptyState .mark{margin-bottom:14px;opacity:0.4;}
+.emptyState h3{font-family:'Fraunces',serif;font-weight:500;font-size:19px;margin:0 0 6px;color:var(--ink);}
+.emptyState p{font-size:14px;margin:0;}
+
+/* ---------- MODAL ---------- */
+.modalOverlay{
+  position:fixed;inset:0;background:rgba(33,44,46,0.45);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;z-index:50;
+}
+.modal{
+  background:var(--surface);
+  border-radius:16px;
+  width:100%;max-width:440px;
+  padding:28px 28px 24px;
+  box-shadow:0 20px 60px -12px rgba(0,0,0,0.35);
+  max-height:90vh;overflow-y:auto;
+}
+.modal h3{
+  font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:0 0 20px;
+}
+.modalActions{display:flex;gap:10px;margin-top:6px;}
+.modalActions .btnPrimary{flex:1;}
+.modalActions .btnGhost{flex:1;text-align:center;}
+
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--ink);color:#fff;
+  padding:11px 20px;border-radius:9px;
+  font-size:13.5px;box-shadow:var(--shadow);
+  z-index:100;opacity:0;pointer-events:none;
+  transition:opacity .2s ease, transform .2s ease;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ AUTH SCREEN ============ -->
+  <section id="auth">
+    <div class="brandPanel">
+      <svg class="toothField" width="100%" height="100%" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice">
+        <g fill="none" stroke="#F5F2EB" stroke-width="2">
+          <path d="M60 80 C40 80 30 110 35 140 C38 165 50 175 55 200 C58 215 65 225 75 225 C85 225 88 210 90 195 C92 210 96 225 106 225 C116 225 122 212 124 195 C128 170 140 160 143 135 C146 108 132 80 106 80 C96 80 90 88 83 88 C76 88 70 80 60 80 Z" transform="translate(240,60) scale(0.9)"/>
+          <path d="M60 80 C40 80 30 110 35 140 C38 165 50 175 55 200 C58 215 65 225 75 225 C85 225 88 210 90 195 C92 210 96 225 106 225 C116 225 122 212 124 195 C128 170 140 160 143 135 C146 108 132 80 106 80 C96 80 90 88 83 88 C76 88 70 80 60 80 Z" transform="translate(-40,320) scale(0.6) rotate(15)"/>
+        </g>
+      </svg>
+      <div class="brandTop">
+        <span class="mark">
+          <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
+            <path d="M20 8c-6 0-9 5-8.5 11 .3 3.5 2.3 5.5 3 9 .5 2.3 1.7 4 3.2 4 1.7 0 2.1-2.3 2.3-4.5.2 2.2.8 4.5 2.5 4.5 1.6 0 2.7-1.8 3.1-4 .7-3.7 3.1-5.5 3.4-9.3.4-5.7-2.9-10.7-9-10.7Z" stroke="#F5F2EB" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <div class="brandName"><b>Vanand</b><span>Dental</span></div>
+      </div>
+      <div class="brandMid">
+        <h1>Every patient,<br>one clean chart.</h1>
+        <p>Names, numbers, reasons for the visit, and when they're due in — all in one place, built for the front desk.</p>
+      </div>
+      <div class="brandBottom">PATIENT MANAGER</div>
+    </div>
+
+    <div class="formPanel">
+      <div class="formCard">
+
+        <!-- Sign in form -->
+        <div id="loginForm">
+          <h2>Welcome back</h2>
+          <p class="sub">Sign in to open your patient manager.</p>
+          <div class="formMsg" id="loginMsg"></div>
+          <div class="field">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="you@vananddental.com" autocomplete="username">
+          </div>
+          <div class="field">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <button class="btnPrimary" id="loginBtn">Sign in</button>
+          <div class="divider">or</div>
+          <button class="btnGoogle" id="googleLoginBtn">
+            <svg width="17" height="17" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.87 2.7-6.62Z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.95v2.33A9 9 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.66 9c0-.59.1-1.17.29-1.7V4.97H.95A9 9 0 0 0 0 9c0 1.45.35 2.83.95 4.03l3-2.33Z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.9 11.42 0 9 0A9 9 0 0 0 .95 4.97l3 2.33C4.66 5.17 6.65 3.58 9 3.58Z"/></svg>
+            Continue with Google
+          </button>
+          <p class="googleNote">Demo mode — this creates a sample Google-style account rather than a real Google login.</p>
+          <p class="switchLine">Don't have an account? <a id="toSignup">Sign up</a></p>
+        </div>
+
+        <!-- Sign up form -->
+        <div id="signupForm" class="hidden">
+          <h2>Create your account</h2>
+          <p class="sub">Set up VanandDental for your practice.</p>
+          <div class="formMsg" id="signupMsg"></div>
+          <div class="field">
+            <label for="signupName">Your name</label>
+            <input type="text" id="signupName" placeholder="Dr. Vanand">
+          </div>
+          <div class="field">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" placeholder="you@vananddental.com" autocomplete="username">
+          </div>
+          <div class="field">
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" placeholder="At least 6 characters" autocomplete="new-password">
+          </div>
+          <button class="btnPrimary" id="signupBtn">Sign up</button>
+          <div class="divider">or</div>
+          <button class="btnGoogle" id="googleSignupBtn">
+            <svg width="17" height="17" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.87 2.7-6.62Z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.95v2.33A9 9 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.66 9c0-.59.1-1.17.29-1.7V4.97H.95A9 9 0 0 0 0 9c0 1.45.35 2.83.95 4.03l3-2.33Z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.9 11.42 0 9 0A9 9 0 0 0 .95 4.97l3 2.33C4.66 5.17 6.65 3.58 9 3.58Z"/></svg>
+            Continue with Google
+          </button>
+          <p class="googleNote">Demo mode — this creates a sample Google-style account rather than a real Google login.</p>
+          <p class="switchLine">Already have an account? <a id="toLogin">Sign in</a></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section id="dashboard" class="hidden">
+    <div class="topbar">
+      <div class="brandName" style="display:flex;align-items:center;gap:10px;">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <path class="toothStroke" d="M20 8c-6 0-9 5-8.5 11 .3 3.5 2.3 5.5 3 9 .5 2.3 1.7 4 3.2 4 1.7 0 2.1-2.3 2.3-4.5.2 2.2.8 4.5 2.5 4.5 1.6 0 2.7-1.8 3.1-4 .7-3.7 3.1-5.5 3.4-9.3.4-5.7-2.9-10.7-9-10.7Z" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <span><b>Vanand</b><span style="font-weight:400;opacity:0.7;">Dental</span></span>
+      </div>
+      <div class="topbarRight">
+        <div class="userChip">
+          <div class="userAvatar" id="userAvatar">V</div>
+          <span id="userLabel"></span>
+        </div>
+        <button class="btnGhost" id="logoutBtn">Sign out</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="mainHead">
+        <div>
+          <h1>Patient manager</h1>
+          <div class="count" id="patientCount">0 patients</div>
+        </div>
+        <button class="btnAdd" id="addPatientBtn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+          New patient
+        </button>
+      </div>
+
+      <div class="searchRow">
+        <input type="text" id="searchInput" placeholder="Search by name, phone, email, or reason…">
+      </div>
+
+      <div class="patientGrid" id="patientGrid"></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ PATIENT MODAL ============ -->
+<div class="modalOverlay hidden" id="patientModalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">New patient</h3>
+    <div class="field">
+      <label for="pName">Full name</label>
+      <input type="text" id="pName" placeholder="Jane Doe">
+    </div>
+    <div class="field">
+      <label for="pPhone">Phone number</label>
+      <input type="tel" id="pPhone" placeholder="(253) 555-0110">
+    </div>
+    <div class="field">
+      <label for="pEmail">Email</label>
+      <input type="email" id="pEmail" placeholder="jane@email.com">
+    </div>
+    <div class="field">
+      <label for="pReason">Reason for appointment</label>
+      <input type="text" id="pReason" placeholder="Cleaning, filling, consult…">
+    </div>
+    <div class="field">
+      <label for="pTime">Appointment time</label>
+      <input type="datetime-local" id="pTime">
+    </div>
+    <div class="modalActions">
+      <button class="btnGhost" id="modalCancel">Cancel</button>
+      <button class="btnPrimary" id="modalSave">Save patient</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------------- Storage helpers ----------------
+async function storeGet(key){
+  try{
+    const r = await window.storage.get(key, false);
+    return r ? JSON.parse(r.value) : null;
+  }catch(e){ return null; }
+}
+async function storeSet(key, value){
+  try{
+    await window.storage.set(key, JSON.stringify(value), false);
+    return true;
+  }catch(e){ console.error('storage set failed', e); return false; }
+}
+async function storeDelete(key){
+  try{ await window.storage.delete(key, false); }catch(e){}
+}
+
+// ---------------- Hashing (SHA-256 via WebCrypto) ----------------
+async function hashPassword(pw){
+  const enc = new TextEncoder().encode(pw);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// ---------------- State ----------------
+let currentUser = null; // {email, name, provider}
+let patients = [];
+let editingId = null;
+
+// ---------------- Toast ----------------
+let toastTimer = null;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 2400);
+}
+
+// ---------------- Init ----------------
+async function init(){
+  const session = await storeGet('session');
+  if(session && session.email){
+    const account = await storeGet('account:'+session.email);
+    if(account){
+      currentUser = account;
+      await enterDashboard();
+      return;
+    }
+  }
+  showAuth();
+}
+
+function showAuth(){
+  document.getElementById('auth').classList.remove('hidden');
+  document.getElementById('dashboard').classList.add('hidden');
+}
+
+async function enterDashboard(){
+  document.getElementById('auth').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('userLabel').textContent = currentUser.name || currentUser.email;
+  document.getElementById('userAvatar').textContent = (currentUser.name || currentUser.email || '?').trim()[0].toUpperCase();
+  patients = (await storeGet('patients:'+currentUser.email)) || [];
+  renderPatients();
+}
+
+// ---------------- Auth form switching ----------------
+document.getElementById('toSignup').addEventListener('click', ()=>{
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('signupForm').classList.remove('hidden');
+});
+document.getElementById('toLogin').addEventListener('click', ()=>{
+  document.getElementById('signupForm').classList.add('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
+});
+
+function showMsg(id, text, type){
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'formMsg show ' + type;
+}
+function clearMsg(id){
+  const el = document.getElementById(id);
+  el.className = 'formMsg';
+}
+
+// ---------------- Sign up ----------------
+document.getElementById('signupBtn').addEventListener('click', async ()=>{
+  clearMsg('signupMsg');
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+  const password = document.getElementById('signupPassword').value;
+
+  if(!name || !email || !password){
+    showMsg('signupMsg','Please fill in every field.','error'); return;
+  }
+  if(!email.includes('@') || !email.includes('.')){
+    showMsg('signupMsg','Enter a valid email address.','error'); return;
+  }
+  if(password.length < 6){
+    showMsg('signupMsg','Password should be at least 6 characters.','error'); return;
+  }
+
+  const existing = await storeGet('account:'+email);
+  if(existing){
+    showMsg('signupMsg','An account with that email already exists. Try signing in.','error'); return;
+  }
+
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.textContent = 'Creating account…';
+
+  const passwordHash = await hashPassword(password);
+  const account = {email, name, passwordHash, provider:'email'};
+  await storeSet('account:'+email, account);
+  await storeSet('session', {email});
+  await storeSet('patients:'+email, []);
+
+  currentUser = account;
+  btn.disabled = false; btn.textContent = 'Sign up';
+  toast('Account created — welcome!');
+  await enterDashboard();
+});
+
+// ---------------- Sign in ----------------
+document.getElementById('loginBtn').addEventListener('click', async ()=>{
+  clearMsg('loginMsg');
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+
+  if(!email || !password){
+    showMsg('loginMsg','Enter your email and password.','error'); return;
+  }
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+
+  const account = await storeGet('account:'+email);
+  if(!account){
+    btn.disabled = false; btn.textContent = 'Sign in';
+    showMsg('loginMsg','No account found with that email.','error'); return;
+  }
+  const hash = await hashPassword(password);
+  if(hash !== account.passwordHash){
+    btn.disabled = false; btn.textContent = 'Sign in';
+    showMsg('loginMsg','Incorrect password.','error'); return;
+  }
+
+  await storeSet('session', {email});
+  currentUser = account;
+  btn.disabled = false; btn.textContent = 'Sign in';
+  toast('Welcome back!');
+  await enterDashboard();
+});
+
+// ---------------- Google (demo) ----------------
+async function googleDemoFlow(){
+  const email = 'demo.dentist@gmail.com';
+  let account = await storeGet('account:'+email);
+  if(!account){
+    account = {email, name:'Demo Dentist', passwordHash:null, provider:'google'};
+    await storeSet('account:'+email, account);
+    await storeSet('patients:'+email, []);
+  }
+  await storeSet('session', {email});
+  currentUser = account;
+  toast('Signed in with demo Google account');
+  await enterDashboard();
+}
+document.getElementById('googleLoginBtn').addEventListener('click', googleDemoFlow);
+document.getElementById('googleSignupBtn').addEventListener('click', googleDemoFlow);
+
+// ---------------- Sign out ----------------
+document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+  await storeDelete('session');
+  currentUser = null;
+  patients = [];
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+  showAuth();
+});
+
+// ---------------- Patients: render ----------------
+function fmtDateTime(iso){
+  if(!iso) return {date:'No time set', time:''};
+  const d = new Date(iso);
+  if(isNaN(d)) return {date:'No time set', time:''};
+  const date = d.toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+  const time = d.toLocaleTimeString(undefined,{hour:'numeric', minute:'2-digit'});
+  return {date, time};
+}
+
+function renderPatients(){
+  const grid = document.getElementById('patientGrid');
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+
+  let list = [...patients];
+  if(q){
+    list = list.filter(p =>
+      (p.name||'').toLowerCase().includes(q) ||
+      (p.phone||'').toLowerCase().includes(q) ||
+      (p.email||'').toLowerCase().includes(q) ||
+      (p.reason||'').toLowerCase().includes(q)
+    );
+  }
+  list.sort((a,b)=>{
+    const ta = a.appointmentTime ? new Date(a.appointmentTime).getTime() : Infinity;
+    const tb = b.appointmentTime ? new Date(b.appointmentTime).getTime() : Infinity;
+    return ta - tb;
+  });
+
+  document.getElementById('patientCount').textContent =
+    patients.length + (patients.length===1 ? ' patient' : ' patients');
+
+  if(list.length === 0){
+    grid.innerHTML = `
+      <div class="emptyState">
+        <span class="mark">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M20 8c-6 0-9 5-8.5 11 .3 3.5 2.3 5.5 3 9 .5 2.3 1.7 4 3.2 4 1.7 0 2.1-2.3 2.3-4.5.2 2.2.8 4.5 2.5 4.5 1.6 0 2.7-1.8 3.1-4 .7-3.7 3.1-5.5 3.4-9.3.4-5.7-2.9-10.7-9-10.7Z" stroke="#647070" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h3>${patients.length===0 ? 'No patients yet' : 'No matches'}</h3>
+        <p>${patients.length===0 ? 'Add your first patient to start building the chart list.' : 'Try a different search term.'}</p>
+      </div>`;
+    return;
+  }
+
+  const now = Date.now();
+  grid.innerHTML = list.map(p=>{
+    const {date, time} = fmtDateTime(p.appointmentTime);
+    const isPast = p.appointmentTime && new Date(p.appointmentTime).getTime() < now;
+    return `
+      <div class="chart ${isPast ? 'past' : ''}">
+        <div class="chartTop">
+          <div>
+            <p class="chartName">${escapeHtml(p.name || 'Unnamed patient')}</p>
+            <p class="chartReason">${escapeHtml(p.reason || 'No reason noted')}</p>
+          </div>
+          <div class="chartTime">
+            <div class="date">${date}</div>
+            ${time ? `<div class="time">${time}</div>` : ''}
+          </div>
+        </div>
+        <div class="chartMeta">
+          <div><span>Phone</span>${escapeHtml(p.phone || '—')}</div>
+          <div><span>Email</span>${escapeHtml(p.email || '—')}</div>
+        </div>
+        <div class="chartActions">
+          <button onclick="openEdit('${p.id}')">Edit</button>
+          <button class="del" onclick="deletePatient('${p.id}')">Delete</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+document.getElementById('searchInput').addEventListener('input', renderPatients);
+
+// ---------------- Patients: add/edit modal ----------------
+const overlay = document.getElementById('patientModalOverlay');
+
+function openAdd(){
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'New patient';
+  document.getElementById('pName').value = '';
+  document.getElementById('pPhone').value = '';
+  document.getElementById('pEmail').value = '';
+  document.getElementById('pReason').value = '';
+  document.getElementById('pTime').value = '';
+  overlay.classList.remove('hidden');
+}
+
+function openEdit(id){
+  const p = patients.find(x=>x.id===id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Edit patient';
+  document.getElementById('pName').value = p.name || '';
+  document.getElementById('pPhone').value = p.phone || '';
+  document.getElementById('pEmail').value = p.email || '';
+  document.getElementById('pReason').value = p.reason || '';
+  document.getElementById('pTime').value = p.appointmentTime || '';
+  overlay.classList.remove('hidden');
+}
+
+async function deletePatient(id){
+  patients = patients.filter(p=>p.id!==id);
+  await storeSet('patients:'+currentUser.email, patients);
+  renderPatients();
+  toast('Patient removed');
+}
+
+document.getElementById('addPatientBtn').addEventListener('click', openAdd);
+document.getElementById('modalCancel').addEventListener('click', ()=> overlay.classList.add('hidden'));
+overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.classList.add('hidden'); });
+
+document.getElementById('modalSave').addEventListener('click', async ()=>{
+  const name = document.getElementById('pName').value.trim();
+  const phone = document.getElementById('pPhone').value.trim();
+  const email = document.getElementById('pEmail').value.trim();
+  const reason = document.getElementById('pReason').value.trim();
+  const appointmentTime = document.getElementById('pTime').value;
+
+  if(!name){
+    document.getElementById('pName').classList.add('invalid');
+    toast('Patient name is required');
+    return;
+  }
+  document.getElementById('pName').classList.remove('invalid');
+
+  if(editingId){
+    const idx = patients.findIndex(p=>p.id===editingId);
+    if(idx > -1){
+      patients[idx] = {...patients[idx], name, phone, email, reason, appointmentTime};
+    }
+  }else{
+    patients.push({
+      id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      name, phone, email, reason, appointmentTime
+    });
+  }
+
+  await storeSet('patients:'+currentUser.email, patients);
+  overlay.classList.add('hidden');
+  renderPatients();
+  toast(editingId ? 'Patient updated' : 'Patient added');
+});
+
+// Enter-to-submit on auth forms
+document.getElementById('loginPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('loginBtn').click(); });
+document.getElementById('signupPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('signupBtn').click(); });
+
+init();
+</script>
+</body>
+</html>
